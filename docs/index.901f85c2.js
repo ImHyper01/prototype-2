@@ -548,6 +548,7 @@ class Game {
         9,
         10
     ];
+    baglist = [];
     // gameover = boolean = true
     constructor(){
         this.pixi = new _pixiJs.Application({
@@ -564,7 +565,7 @@ class Game {
     loadCompleted() {
         this.dino = new _dino.Dino(this.loader.resources["dinoImage"].texture, this.pixi);
         this.pixi.stage.addChild(this.dino);
-        this.enemy = new _enemy.Enemy(this.loader.resources["stoneImage"].texture);
+        this.enemy = new _enemy.Enemy(this.loader.resources["stoneImage"].texture, this.pixi);
         this.pixi.stage.addChild(this.enemy);
         this.money = new _money.MoneyBag(this.loader.resources["geldImage"].texture);
         this.pixi.stage.addChild(this.money);
@@ -574,18 +575,18 @@ class Game {
         ).add(()=>this.dino.update()
         );
     }
-    update() {
+    update(delta) {
         for(let i = -1; i >= 0; i--);
+        if (this.collision(this.dino, this.enemy)) console.log("player touches enemy");
         this.money.x = 465;
         this.money.y += 3;
         this.enemy.x = 190;
         this.enemy.y += 3;
         this.enemy2.x = 715;
         this.enemy2.y += 3;
-    // console.log(this.numbers[Math.ceil(Math.random() * this.numbers.length)])
     }
-    collision(money, dino) {
-        const bounds1 = money.getBounds();
+    collision(enemy, dino) {
+        const bounds1 = enemy.getBounds();
         const bounds2 = dino.getBounds();
         return bounds1.x < bounds2.x + bounds2.width && bounds1.x + bounds1.width > bounds2.x && bounds1.y < bounds2.y + bounds2.height && bounds1.y + bounds1.height > bounds2.y;
     }
@@ -37197,11 +37198,12 @@ parcelHelpers.export(exports, "Enemy", ()=>Enemy
 var _pixiJs = require("pixi.js");
 class Enemy extends _pixiJs.Sprite {
     //eigenschappen
-    constructor(texture){
+    constructor(texture, pixi){
         super(texture);
         this.x = 190;
-        this.y = 0;
+        this.y += 3;
         this.scale.set(-2, 2);
+        pixi.stage.addChild(this);
     }
 }
 
