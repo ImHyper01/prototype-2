@@ -535,21 +535,10 @@ var _dinoPngDefault = parcelHelpers.interopDefault(_dinoPng);
 var _enemy = require("./enemy");
 var _money = require("./money");
 var _enemy2 = require("./enemy2");
+var _gameoverPng = require("./images/gameover.png");
+var _gameoverPngDefault = parcelHelpers.interopDefault(_gameoverPng);
 class Game {
-    numbers = [
-        1,
-        2,
-        3,
-        4,
-        5,
-        6,
-        7,
-        8,
-        9,
-        10
-    ];
-    baglist = [];
-    // gameover = boolean = true
+    GameOver = true;
     constructor(){
         this.pixi = new _pixiJs.Application({
             width: 800,
@@ -557,7 +546,7 @@ class Game {
         });
         document.body.appendChild(this.pixi.view);
         this.loader = new _pixiJs.Loader();
-        this.loader.add('fishTexture', _fishPngDefault.default).add('bubbleTexture', _bubblePngDefault.default).add('waterTexture', _waterJpgDefault.default).add('geldImage', _geldPngDefault.default).add('stoneImage', _stonePngDefault.default).add('dinoImage', _dinoPngDefault.default);
+        this.loader.add('fishTexture', _fishPngDefault.default).add('bubbleTexture', _bubblePngDefault.default).add('waterTexture', _waterJpgDefault.default).add('geldImage', _geldPngDefault.default).add('stoneImage', _stonePngDefault.default).add('dinoImage', _dinoPngDefault.default).add('GameOver', _gameoverPngDefault.default);
         this.loader.load(()=>this.loadCompleted()
         );
     }
@@ -571,13 +560,23 @@ class Game {
         this.pixi.stage.addChild(this.money);
         this.enemy2 = new _enemy2.Enemy2(this.loader.resources["stoneImage"].texture);
         this.pixi.stage.addChild(this.enemy2);
+        // this.GameOver = new GameOver(this.loader.resources["GameOver"].texture!)
         this.pixi.ticker.add(()=>this.update()
         ).add(()=>this.dino.update()
         );
     }
-    update(delta) {
+    update() {
         for(let i = -1; i >= 0; i--);
-        if (this.collision(this.dino, this.enemy)) console.log("player touches enemy");
+        //hierzo wordt gecheckt als de dino de enemy of moneybag geraakt wordt
+        if (this.collision(this.dino, this.enemy)) {
+            this.enemy.destroy();
+            console.log("player touches enemy");
+        }
+        if (this.collision(this.dino, this.money)) console.log("player touches moneybag");
+        if (this.collision(this.dino, this.enemy2)) {
+            this.enemy2.destroy();
+            console.log("player touches enemy");
+        }
         this.money.x = 465;
         this.money.y += 3;
         this.enemy.x = 190;
@@ -593,7 +592,7 @@ class Game {
 }
 let game = new Game();
 
-},{"pixi.js":"dsYej","./images/fish.png":"3tLwD","./images/bubble.png":"iMP3P","./images/water.jpg":"jj9Eg","./dino":"bztIT","./images/geld.png":"cRdoz","./images/stone.png":"cu4q5","./images/dino.png":"c8KfO","./enemy":"e8Rej","./money":"678a3","./enemy2":"2o3kr","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"dsYej":[function(require,module,exports) {
+},{"pixi.js":"dsYej","./images/fish.png":"3tLwD","./images/bubble.png":"iMP3P","./images/water.jpg":"jj9Eg","./dino":"bztIT","./images/geld.png":"cRdoz","./images/stone.png":"cu4q5","./images/dino.png":"c8KfO","./enemy":"e8Rej","./money":"678a3","./enemy2":"2o3kr","./images/gameover.png":"iBSOE","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"dsYej":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "utils", ()=>_utils
@@ -37239,6 +37238,9 @@ class Enemy2 extends _pixiJs.Sprite {
     }
 }
 
-},{"pixi.js":"dsYej","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["8Atcy","edeGs"], "edeGs", "parcelRequirea0e5")
+},{"pixi.js":"dsYej","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"iBSOE":[function(require,module,exports) {
+module.exports = require('./helpers/bundle-url').getBundleURL('emE5o') + "gameover.17d6241a.png" + "?" + Date.now();
+
+},{"./helpers/bundle-url":"lgJ39"}]},["8Atcy","edeGs"], "edeGs", "parcelRequirea0e5")
 
 //# sourceMappingURL=index.901f85c2.js.map

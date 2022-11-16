@@ -8,7 +8,7 @@ export class Enemy extends PIXI.Sprite{
         this.x = 190
         this.y += 3
 
-        
+
         this.scale.set(-2, 2)
         pixi.stage.addChild(this)
     

@@ -10,10 +10,7 @@ import { Sprite } from 'pixi.js'
 import { Enemy } from './enemy'
 import { MoneyBag } from './money'
 import { Enemy2 } from './enemy2'
-
-
-
-
+import GameOver from "./images/gameover.png"
 
 
 export class Game {
@@ -25,9 +22,8 @@ export class Game {
     enemy: Enemy
     enemy2: Enemy2
     money: MoneyBag
-    numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-    baglist: MoneyBag [] =[]
-    // gameover = boolean = true
+    GameOver = true
+    
 
     constructor() {
         this.pixi = new PIXI.Application({ width: 800, height: 450 })
@@ -41,6 +37,7 @@ export class Game {
         .add('geldImage', geldImage)
         .add('stoneImage', stoneImage)
         .add('dinoImage', dinoImage)
+        .add('GameOver', GameOver)
         this.loader.load(()=>this.loadCompleted())
     }
 
@@ -58,21 +55,42 @@ export class Game {
         this.enemy2 = new Enemy2(this.loader.resources["stoneImage"].texture!)
         this.pixi.stage.addChild(this.enemy2)
 
+        // this.GameOver = new GameOver(this.loader.resources["GameOver"].texture!)
+        
+
         this.pixi.ticker.add(() => this.update())
         .add(() => this.dino.update())
 
     }
-    update(delta:number) {
+    update() {
         for (let i = - 1; i >= 0; i--) {
 
         }
-        
 
+        //hierzo wordt gecheckt als de dino de enemy of moneybag geraakt wordt
         if(this.collision(this.dino, this.enemy)){
-            console.log("player touches enemy")
-        }
-    
 
+            this.enemy.destroy()
+            console.log("player touches enemy")
+
+        }
+
+
+        if(this.collision(this.dino, this.money)){
+
+            console.log("player touches moneybag")
+            
+        }
+
+        
+        if(this.collision(this.dino, this.enemy2)){
+
+            this.enemy2.destroy();
+            console.log("player touches enemy")
+
+        }
+
+        
          this.money.x = 465
          this.money.y += 3
 
@@ -81,7 +99,8 @@ export class Game {
 
          this.enemy2.x = 715
          this.enemy2.y += 3
-            
+        
+
     }
 
 collision(enemy: Enemy , dino: Dino) {
