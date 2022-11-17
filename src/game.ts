@@ -11,7 +11,7 @@ import { Enemy } from './enemy'
 import { MoneyBag } from './money'
 import { Enemy2 } from './enemy2'
 import { gameover } from './gameover'
-import GameOver from "./images/gameover.png"
+import gameImage from "./images/gameover.png"
 
 
 export class Game {
@@ -38,12 +38,16 @@ export class Game {
         .add('geldImage', geldImage)
         .add('stoneImage', stoneImage)
         .add('dinoImage', dinoImage)
-        .add('GameOver', GameOver)
+        .add('gameImage', gameImage)
         this.loader.load(()=>this.loadCompleted())
     }
 
     // functies
     loadCompleted() {
+
+        this.gameover = new gameover(this.loader.resources["gameImage"].texture!)
+       
+
         this.dino = new Dino(this.loader.resources["dinoImage"].texture!, this.pixi)
         this.pixi.stage.addChild(this.dino)
 
@@ -56,7 +60,7 @@ export class Game {
         this.enemy2 = new Enemy2(this.loader.resources["stoneImage"].texture!)
         this.pixi.stage.addChild(this.enemy2)
 
-        this.gameover = new GameOver(this.loader.resources["GameOver"].texture!)
+       
         
 
         this.pixi.ticker.add(() => this.update())

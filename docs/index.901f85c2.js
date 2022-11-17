@@ -535,10 +535,10 @@ var _dinoPngDefault = parcelHelpers.interopDefault(_dinoPng);
 var _enemy = require("./enemy");
 var _money = require("./money");
 var _enemy2 = require("./enemy2");
+var _gameover = require("./gameover");
 var _gameoverPng = require("./images/gameover.png");
 var _gameoverPngDefault = parcelHelpers.interopDefault(_gameoverPng);
 class Game {
-    GameOver = true;
     constructor(){
         this.pixi = new _pixiJs.Application({
             width: 800,
@@ -546,12 +546,13 @@ class Game {
         });
         document.body.appendChild(this.pixi.view);
         this.loader = new _pixiJs.Loader();
-        this.loader.add('fishTexture', _fishPngDefault.default).add('bubbleTexture', _bubblePngDefault.default).add('waterTexture', _waterJpgDefault.default).add('geldImage', _geldPngDefault.default).add('stoneImage', _stonePngDefault.default).add('dinoImage', _dinoPngDefault.default).add('GameOver', _gameoverPngDefault.default);
+        this.loader.add('fishTexture', _fishPngDefault.default).add('bubbleTexture', _bubblePngDefault.default).add('waterTexture', _waterJpgDefault.default).add('geldImage', _geldPngDefault.default).add('stoneImage', _stonePngDefault.default).add('dinoImage', _dinoPngDefault.default).add('gameImage', _gameoverPngDefault.default);
         this.loader.load(()=>this.loadCompleted()
         );
     }
     // functies
     loadCompleted() {
+        this.gameover = new _gameover.gameover(this.loader.resources["gameImage"].texture);
         this.dino = new _dino.Dino(this.loader.resources["dinoImage"].texture, this.pixi);
         this.pixi.stage.addChild(this.dino);
         this.enemy = new _enemy.Enemy(this.loader.resources["stoneImage"].texture, this.pixi);
@@ -560,7 +561,6 @@ class Game {
         this.pixi.stage.addChild(this.money);
         this.enemy2 = new _enemy2.Enemy2(this.loader.resources["stoneImage"].texture);
         this.pixi.stage.addChild(this.enemy2);
-        // this.GameOver = new GameOver(this.loader.resources["GameOver"].texture!)
         this.pixi.ticker.add(()=>this.update()
         ).add(()=>this.dino.update()
         );
@@ -571,6 +571,7 @@ class Game {
         if (this.collision(this.dino, this.enemy)) {
             this.enemy.destroy();
             console.log("player touches enemy");
+            this.pixi.stage.addChild(this.gameover);
         }
         if (this.collision(this.dino, this.money)) console.log("player touches moneybag");
         if (this.collision(this.dino, this.enemy2)) {
@@ -592,7 +593,7 @@ class Game {
 }
 let game = new Game();
 
-},{"pixi.js":"dsYej","./images/fish.png":"3tLwD","./images/bubble.png":"iMP3P","./images/water.jpg":"jj9Eg","./dino":"bztIT","./images/geld.png":"cRdoz","./images/stone.png":"cu4q5","./images/dino.png":"c8KfO","./enemy":"e8Rej","./money":"678a3","./enemy2":"2o3kr","./images/gameover.png":"iBSOE","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"dsYej":[function(require,module,exports) {
+},{"pixi.js":"dsYej","./images/fish.png":"3tLwD","./images/bubble.png":"iMP3P","./images/water.jpg":"jj9Eg","./dino":"bztIT","./images/geld.png":"cRdoz","./images/stone.png":"cu4q5","./images/dino.png":"c8KfO","./enemy":"e8Rej","./money":"678a3","./enemy2":"2o3kr","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./images/gameover.png":"iBSOE","./gameover":"eBArR"}],"dsYej":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "utils", ()=>_utils
@@ -37241,6 +37242,19 @@ class Enemy2 extends _pixiJs.Sprite {
 },{"pixi.js":"dsYej","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"iBSOE":[function(require,module,exports) {
 module.exports = require('./helpers/bundle-url').getBundleURL('emE5o') + "gameover.17d6241a.png" + "?" + Date.now();
 
-},{"./helpers/bundle-url":"lgJ39"}]},["8Atcy","edeGs"], "edeGs", "parcelRequirea0e5")
+},{"./helpers/bundle-url":"lgJ39"}],"eBArR":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "gameover", ()=>gameover
+);
+var _pixiJs = require("pixi.js");
+class gameover extends _pixiJs.Sprite {
+    constructor(texture){
+        super(texture);
+        this.scale.set(-5, 5);
+    }
+}
+
+},{"pixi.js":"dsYej","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["8Atcy","edeGs"], "edeGs", "parcelRequirea0e5")
 
 //# sourceMappingURL=index.901f85c2.js.map
