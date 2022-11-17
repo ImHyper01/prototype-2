@@ -10,6 +10,7 @@ import { Sprite } from 'pixi.js'
 import { Enemy } from './enemy'
 import { MoneyBag } from './money'
 import { Enemy2 } from './enemy2'
+import { gameover } from './gameover'
 import GameOver from "./images/gameover.png"
 
 
@@ -22,7 +23,7 @@ export class Game {
     enemy: Enemy
     enemy2: Enemy2
     money: MoneyBag
-    GameOver = true
+    gameover: gameover
     
 
     constructor() {
@@ -55,7 +56,7 @@ export class Game {
         this.enemy2 = new Enemy2(this.loader.resources["stoneImage"].texture!)
         this.pixi.stage.addChild(this.enemy2)
 
-        // this.GameOver = new GameOver(this.loader.resources["GameOver"].texture!)
+        this.gameover = new GameOver(this.loader.resources["GameOver"].texture!)
         
 
         this.pixi.ticker.add(() => this.update())
@@ -72,6 +73,7 @@ export class Game {
 
             this.enemy.destroy()
             console.log("player touches enemy")
+            this.pixi.stage.addChild(this.gameover)
 
         }
 
