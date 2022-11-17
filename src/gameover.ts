@@ -5,9 +5,12 @@ export class gameover extends PIXI.Sprite{
 
     constructor(texture: PIXI.Texture) {
         super(texture);
+        this.x = 90
 
-
-        this.scale.set(-5, 5)
+        this.scale.set(1, 1)
         
+
     }
+
+
 }
