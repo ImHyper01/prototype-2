@@ -37254,7 +37254,7 @@ class Laser extends _pixiJs.Sprite {
         this.y = y + 20;
     }
     update() {
-        this.x += 3;
+        this.x += 10;
         if (this.x > 1700) this.game.removeBullet(this);
     }
 }
