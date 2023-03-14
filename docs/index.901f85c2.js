@@ -522,6 +522,8 @@ var _planePng = require("./images/plane.png");
 var _planePngDefault = parcelHelpers.interopDefault(_planePng);
 var _wolkenJpg = require("./images/wolken.jpg");
 var _wolkenJpgDefault = parcelHelpers.interopDefault(_wolkenJpg);
+var _laserPng = require("./images/laser.png");
+var _laserPngDefault = parcelHelpers.interopDefault(_laserPng);
 var _plane = require("./plane");
 class game {
     constructor(){
@@ -532,7 +534,7 @@ class game {
         const pixiCanvas = document.getElementById("pixi-canvas");
         if (pixiCanvas != null) pixiCanvas.appendChild(this.pixi.view);
         this.loader = new _pixiJs.Loader();
-        this.loader.add('bomTexture', _bomPngDefault.default).add('planeTexture', _planePngDefault.default).add('cloudTexture', _wolkenJpgDefault.default);
+        this.loader.add('bomTexture', _bomPngDefault.default).add('planeTexture', _planePngDefault.default).add('cloudTexture', _wolkenJpgDefault.default).add('laserTexture', _laserPngDefault.default);
         this.loader.load(()=>this.loadCompleted()
         );
     }
@@ -551,7 +553,7 @@ class game {
 }
 let g = new game();
 
-},{"pixi.js":"dsYej","./images/bom.png":"7ua4X","./images/plane.png":"5sI41","./images/wolken.jpg":"hO0sz","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./plane":"fpgx3"}],"dsYej":[function(require,module,exports) {
+},{"pixi.js":"dsYej","./images/bom.png":"7ua4X","./images/plane.png":"5sI41","./images/wolken.jpg":"hO0sz","./plane":"fpgx3","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./images/laser.png":"h3VaZ"}],"dsYej":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "utils", ()=>_utils
@@ -37142,6 +37144,9 @@ class Plane extends _pixiJs.Sprite {
     }
 }
 
-},{"pixi.js":"dsYej","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["fpRtI","edeGs"], "edeGs", "parcelRequirea0e5")
+},{"pixi.js":"dsYej","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"h3VaZ":[function(require,module,exports) {
+module.exports = require('./helpers/bundle-url').getBundleURL('emE5o') + "laser.f84c9f98.png" + "?" + Date.now();
+
+},{"./helpers/bundle-url":"lgJ39"}]},["fpRtI","edeGs"], "edeGs", "parcelRequirea0e5")
 
 //# sourceMappingURL=index.901f85c2.js.map

@@ -2,6 +2,7 @@ import * as PIXI from 'pixi.js'
 import bomImage from "./images/bom.png"
 import planeImage from "./images/plane.png"
 import cloudImage from "./images/wolken.jpg"
+import laserImage from "./images/laser.png"
 import { Bom } from "./bom"
 import { Plane } from "./plane"
 
@@ -24,6 +25,7 @@ constructor(){
     this.loader.add('bomTexture', bomImage)
         .add('planeTexture', planeImage)
         .add('cloudTexture', cloudImage)
+        .add('laserTexture', laserImage)
     this.loader.load(()=> this.loadCompleted())
 
 }
