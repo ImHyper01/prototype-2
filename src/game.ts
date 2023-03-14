@@ -14,6 +14,7 @@ class game {
     plane : Plane
     laser : Laser
 
+
 constructor(){
     this.pixi = new PIXI.Application({ width: 1500, height: 700 })
     const pixiCanvas = document.getElementById("pixi-canvas")
@@ -46,6 +47,9 @@ loadCompleted(){
     this.plane = new Plane (this.loader.resources["planeTexture"].texture!)
     this.pixi.stage.addChild(this.plane)
 
+    this.laser = new Laser (this.loader.resources["laserTexture"].texture!)
+    this.pixi.stage.addChild(this.laser)
+
 
     this.pixi.ticker.add(() => this.update())
 }
@@ -54,9 +58,22 @@ update(){
     
     for (let bom of this.bom){
         bom.thrive()
+   
     }
 
     this.plane.thrive()
+}
+
+
+
+collision(laser:PIXI.Sprite, bom:PIXI.Sprite){
+    const bounds1 = laser.getBounds()
+    const bounds2 = bom.getBounds()
+
+    return bounds1.x < bounds2.x + bounds2.width
+    && bounds1.x + bounds1.width > bounds2.x
+    && bounds1.y < bounds2.y + bounds2.height
+    && bounds1.y + bounds1.height > bounds2.y;
 }
 
 

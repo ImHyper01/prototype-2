@@ -526,6 +526,7 @@ var _laserPng = require("./images/laser.png");
 var _laserPngDefault = parcelHelpers.interopDefault(_laserPng);
 var _bom = require("./bom");
 var _plane = require("./plane");
+var _laser = require("./laser");
 class game {
     bom = [];
     constructor(){
@@ -551,6 +552,8 @@ class game {
         }
         this.plane = new _plane.Plane(this.loader.resources["planeTexture"].texture);
         this.pixi.stage.addChild(this.plane);
+        this.laser = new _laser.Laser(this.loader.resources["laserTexture"].texture);
+        this.pixi.stage.addChild(this.laser);
         this.pixi.ticker.add(()=>this.update()
         );
     }
@@ -558,10 +561,15 @@ class game {
         for (let bom of this.bom)bom.thrive();
         this.plane.thrive();
     }
+    collision(laser, bom) {
+        const bounds1 = laser.getBounds();
+        const bounds2 = bom.getBounds();
+        return bounds1.x < bounds2.x + bounds2.width && bounds1.x + bounds1.width > bounds2.x && bounds1.y < bounds2.y + bounds2.height && bounds1.y + bounds1.height > bounds2.y;
+    }
 }
 let g = new game();
 
-},{"pixi.js":"dsYej","./images/bom.png":"7ua4X","./images/plane.png":"5sI41","./images/wolken.jpg":"hO0sz","./plane":"fpgx3","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./images/laser.png":"h3VaZ","./bom":"amdkO"}],"dsYej":[function(require,module,exports) {
+},{"pixi.js":"dsYej","./images/bom.png":"7ua4X","./images/plane.png":"5sI41","./images/wolken.jpg":"hO0sz","./plane":"fpgx3","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./images/laser.png":"h3VaZ","./bom":"amdkO","./laser":"jafZd"}],"dsYej":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "utils", ()=>_utils
@@ -37116,6 +37124,7 @@ class Plane extends _pixiJs.Sprite {
         this.yspeed = 0;
         this.x = 100;
         this.y = 100;
+        this.anchor.set(0.5);
         this.scale.set(1.7);
         window.addEventListener("keydown", (e)=>this.onKeyDown(e)
         );
@@ -37167,8 +37176,13 @@ class Bom extends _pixiJs.Sprite {
         this.speed = 3;
         this.x = window.innerWidth + 100 + Math.random() * 3000;
         this.y = Math.random() * 1000;
+        this.hitbox = new _pixiJs.Rectangle(0, 0, 70, 55);
         this.anchor.set(0.4);
         this.scale.set(0.7);
+        let greenBox = new _pixiJs.Graphics();
+        greenBox.lineStyle(2, 3407667, 1);
+        greenBox.drawRect(this.hitbox.x, this.hitbox.y, this.hitbox.width, this.hitbox.height);
+        this.addChild(greenBox);
     }
     thrive() {
         this.x -= this.speed;
@@ -37176,6 +37190,33 @@ class Bom extends _pixiJs.Sprite {
             this.x = window.innerWidth + 100;
             this.y = Math.random() * window.innerHeight;
         }
+    }
+    getBounds() {
+        return new _pixiJs.Rectangle(this.x + this.hitbox.x, this.y + this.hitbox.y, this.hitbox.width, this.hitbox.height);
+    }
+}
+
+},{"pixi.js":"dsYej","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"jafZd":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "Laser", ()=>Laser
+);
+var _pixiJs = require("pixi.js");
+class Laser extends _pixiJs.Sprite {
+    xspeed = 0;
+    yspeed = 0;
+    bigLaser = [];
+    laserSpeed = 5;
+    constructor(texture){
+        super(texture);
+        this.xspeed = 0;
+        this.yspeed = 0;
+        this.x = 100;
+        this.y = 100;
+        this.scale.set(1);
+        this.onmousedown = (event)=>{
+            this.xspeed = 5;
+        };
     }
 }
 

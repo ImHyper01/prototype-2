@@ -10,6 +10,7 @@ constructor(texture: PIXI.Texture){
     this.yspeed = 0
     this.x = 100
     this.y = 100
+    this.anchor.set(0.5)
     this.scale.set(1.7)
     
 
