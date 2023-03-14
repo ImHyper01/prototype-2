@@ -28,7 +28,7 @@ constructor(texture: PIXI.Texture, game:any){
 
     
     shoot(){
-        this.game.addBullet(this.x + 80, this.y + 35)
+        this.game.addBullet(this.x + 0, this.y + 0)
     }
     
 
@@ -36,17 +36,14 @@ constructor(texture: PIXI.Texture, game:any){
         switch (e.key.toUpperCase()) {
             case "W":
             case "ARROWUP":
-                console.log("W")
                 this.yspeed = -7
                 break
             case "S":
             case "ARROWDOWN":
-                console.log("S")
                 this.yspeed = 7
                 break
             case "D":
             case "ARROWRIGHT":
-                console.log("shoot")
                 this.shoot()
                 break
         }

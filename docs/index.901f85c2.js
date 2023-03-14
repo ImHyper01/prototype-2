@@ -560,12 +560,14 @@ class game {
         );
     }
     update() {
-        for (let bom of this.bom)bom.thrive();
+        for (let bom of this.bom)bom.update();
+        for (let laser of this.laser)laser.update();
+        for (let bom1 of this.bom)bom1.thrive();
         this.plane.thrive();
+        this.checkCollision();
     }
     addBullet(x, y) {
         console.log("shoot");
-        console.log(this.loader.resources["laserTexture"].texture);
         let b = new _laser.Laser(this.loader.resources["laserTexture"].texture, this, x, y);
         this.laser.push(b);
         this.pixi.stage.addChild(b);
@@ -575,13 +577,22 @@ class game {
         );
         laser.destroy();
     }
+    checkCollision() {
+        for (let laser of this.laser){
+            for (let bom of this.bom)if (this.collision(laser, bom)) {
+                this.removeBullet(laser);
+                bom.resetPosition();
+                break;
+            }
+        }
+    }
     collision(laser, bom) {
         const bounds1 = laser.getBounds();
         const bounds2 = bom.getBounds();
         return bounds1.x < bounds2.x + bounds2.width && bounds1.x + bounds1.width > bounds2.x && bounds1.y < bounds2.y + bounds2.height && bounds1.y + bounds1.height > bounds2.y;
     }
 }
-let g = new game();
+new game();
 
 },{"pixi.js":"dsYej","./images/bom.png":"7ua4X","./images/plane.png":"5sI41","./images/wolken.jpg":"hO0sz","./plane":"fpgx3","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./images/laser.png":"h3VaZ","./bom":"amdkO","./laser":"jafZd"}],"dsYej":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
@@ -37151,23 +37162,20 @@ class Plane extends _pixiJs.Sprite {
         this.y += this.yspeed;
     }
     shoot() {
-        this.game.addBullet(this.x + 80, this.y + 35);
+        this.game.addBullet(this.x + 0, this.y + 0);
     }
     onKeyDown(e) {
         switch(e.key.toUpperCase()){
             case "W":
             case "ARROWUP":
-                console.log("W");
                 this.yspeed = -7;
                 break;
             case "S":
             case "ARROWDOWN":
-                console.log("S");
                 this.yspeed = 7;
                 break;
             case "D":
             case "ARROWRIGHT":
-                console.log("shoot");
                 this.shoot();
                 break;
         }
@@ -37194,11 +37202,9 @@ parcelHelpers.export(exports, "Bom", ()=>Bom
 );
 var _pixiJs = require("pixi.js");
 class Bom extends _pixiJs.Sprite {
+    rotationSpeed = 0.01;
     constructor(texture){
         super(texture);
-        this.speed = 3;
-        this.x = window.innerWidth + 100 + Math.random() * 3000;
-        this.y = Math.random() * 1000;
         this.hitbox = new _pixiJs.Rectangle(0, 0, 70, 55);
         this.anchor.set(0.4);
         this.scale.set(0.7);
@@ -37206,6 +37212,7 @@ class Bom extends _pixiJs.Sprite {
         greenBox.lineStyle(2, 3407667, 1);
         greenBox.drawRect(this.hitbox.x, this.hitbox.y, this.hitbox.width, this.hitbox.height);
         this.addChild(greenBox);
+        this.resetPosition();
     }
     thrive() {
         this.x -= this.speed;
@@ -37216,6 +37223,17 @@ class Bom extends _pixiJs.Sprite {
     }
     getBounds() {
         return new _pixiJs.Rectangle(this.x + this.hitbox.x, this.y + this.hitbox.y, this.hitbox.width, this.hitbox.height);
+    }
+    update() {
+        this.rotation += this.rotationSpeed;
+        this.x -= this.speed;
+        if (this.x < -100) this.resetPosition();
+    }
+    resetPosition() {
+        this.rotationSpeed = Math.random() / 100;
+        this.speed = 1 + Math.random();
+        this.x = 1700 + Math.random() * 120;
+        this.y = Math.random() * 570;
     }
 }
 
@@ -37237,7 +37255,7 @@ class Laser extends _pixiJs.Sprite {
     }
     update() {
         this.x += 3;
-        if (this.x > 900) this.game.removeBullet(this);
+        if (this.x > 1700) this.game.removeBullet(this);
     }
 }
 

@@ -54,19 +54,26 @@ loadCompleted(){
 }
 
 update(){
+
+    for (let bom of this.bom){
+        bom.update()
+    }
+
+    for (let laser of this.laser) {
+        laser.update()
+    }
     
     for (let bom of this.bom){
         bom.thrive()
-   
     }
 
     this.plane.thrive()
+    this.checkCollision()
 }
 
 
 addBullet(x: number, y: number) {
     console.log("shoot")
-    console.log(this.loader.resources["laserTexture"].texture!)
     let b = new Laser(this.loader.resources["laserTexture"].texture!, this, x, y)
     this.laser.push(b)
     this.pixi.stage.addChild(b)
@@ -77,7 +84,20 @@ removeBullet(laser: Laser) {
     laser.destroy()
 }
 
-collision(laser:PIXI.Sprite, bom:PIXI.Sprite){
+
+checkCollision(){
+    for(let laser of this.laser){
+        for(let bom of this.bom){
+            if(this.collision(laser, bom)){
+                this.removeBullet(laser)
+                bom.resetPosition()
+                break
+            }
+        }
+    }
+}
+
+collision(laser:Laser, bom:Bom){
     const bounds1 = laser.getBounds()
     const bounds2 = bom.getBounds()
 
@@ -90,4 +110,4 @@ collision(laser:PIXI.Sprite, bom:PIXI.Sprite){
 
 }
 
-let g = new game()
+new game()

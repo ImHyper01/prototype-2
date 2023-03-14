@@ -13,9 +13,9 @@ export class Laser extends PIXI.Sprite {
         this.y = y + 20
     }
 
-    public update() {
+    update() {
         this.x += 3
-        if (this.x > 900) this.game.removeBullet(this)
+        if (this.x > 1700) this.game.removeBullet(this)
     }
 
                
