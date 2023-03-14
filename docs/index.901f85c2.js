@@ -524,8 +524,10 @@ var _wolkenJpg = require("./images/wolken.jpg");
 var _wolkenJpgDefault = parcelHelpers.interopDefault(_wolkenJpg);
 var _laserPng = require("./images/laser.png");
 var _laserPngDefault = parcelHelpers.interopDefault(_laserPng);
+var _bom = require("./bom");
 var _plane = require("./plane");
 class game {
+    bom = [];
     constructor(){
         this.pixi = new _pixiJs.Application({
             width: 1500,
@@ -542,18 +544,24 @@ class game {
         let bg = new _pixiJs.TilingSprite(this.loader.resources["cloudTexture"].texture, 1200, 700);
         this.pixi.stage.addChild(bg);
         bg.scale.set(1.4);
+        for(let i = 0; i < 10; i++){
+            let bigBomb = new _bom.Bom(this.loader.resources["bomTexture"].texture);
+            this.pixi.stage.addChild(bigBomb);
+            this.bom.push(bigBomb);
+        }
         this.plane = new _plane.Plane(this.loader.resources["planeTexture"].texture);
         this.pixi.stage.addChild(this.plane);
         this.pixi.ticker.add(()=>this.update()
         );
     }
     update() {
+        for (let bom of this.bom)bom.thrive();
         this.plane.thrive();
     }
 }
 let g = new game();
 
-},{"pixi.js":"dsYej","./images/bom.png":"7ua4X","./images/plane.png":"5sI41","./images/wolken.jpg":"hO0sz","./plane":"fpgx3","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./images/laser.png":"h3VaZ"}],"dsYej":[function(require,module,exports) {
+},{"pixi.js":"dsYej","./images/bom.png":"7ua4X","./images/plane.png":"5sI41","./images/wolken.jpg":"hO0sz","./plane":"fpgx3","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./images/laser.png":"h3VaZ","./bom":"amdkO"}],"dsYej":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "utils", ()=>_utils
@@ -37147,6 +37155,30 @@ class Plane extends _pixiJs.Sprite {
 },{"pixi.js":"dsYej","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"h3VaZ":[function(require,module,exports) {
 module.exports = require('./helpers/bundle-url').getBundleURL('emE5o') + "laser.f84c9f98.png" + "?" + Date.now();
 
-},{"./helpers/bundle-url":"lgJ39"}]},["fpRtI","edeGs"], "edeGs", "parcelRequirea0e5")
+},{"./helpers/bundle-url":"lgJ39"}],"amdkO":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "Bom", ()=>Bom
+);
+var _pixiJs = require("pixi.js");
+class Bom extends _pixiJs.Sprite {
+    constructor(texture){
+        super(texture);
+        this.speed = 3;
+        this.x = window.innerWidth + 100 + Math.random() * 3000;
+        this.y = Math.random() * 1000;
+        this.anchor.set(0.4);
+        this.scale.set(0.7);
+    }
+    thrive() {
+        this.x -= this.speed;
+        if (this.x < -100) {
+            this.x = window.innerWidth + 100;
+            this.y = Math.random() * window.innerHeight;
+        }
+    }
+}
+
+},{"pixi.js":"dsYej","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["fpRtI","edeGs"], "edeGs", "parcelRequirea0e5")
 
 //# sourceMappingURL=index.901f85c2.js.map
