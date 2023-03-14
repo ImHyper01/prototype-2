@@ -1,24 +1,21 @@
 import * as PIXI from 'pixi.js'
+import { game } from "./game"
 
 export class Laser extends PIXI.Sprite {
-    xspeed : number = 0
-    yspeed : number = 0
-    bigLaser = []
-    laserSpeed = 5
-    onmousedown: (event: any) => void
+     game:game
+    
+    constructor(texture: PIXI.Texture, game: game , x: number, y: number) {
+        super(texture)
+        this.game = game
+        this.pivot.x = 30
+        this.pivot.y = 30
+        this.x = x + 20
+        this.y = y + 20
+    }
 
-    constructor(texture: PIXI.Texture){
-    super(texture)
-        this.xspeed = 0
-        this.yspeed = 0
-        this.x = 100
-        this.y = 100
-        this.scale.set(1)
-
-        this.onmousedown = (event) => {
-            this.xspeed = 5
-           }
-
+    public update() {
+        this.x += 3
+        if (this.x > 900) this.game.removeBullet(this)
     }
 
                

@@ -515,6 +515,9 @@ function hmrAcceptRun(bundle, id) {
 
 },{}],"edeGs":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "game", ()=>game
+);
 var _pixiJs = require("pixi.js");
 var _bomPng = require("./images/bom.png");
 var _bomPngDefault = parcelHelpers.interopDefault(_bomPng);
@@ -529,6 +532,7 @@ var _plane = require("./plane");
 var _laser = require("./laser");
 class game {
     bom = [];
+    laser = [];
     constructor(){
         this.pixi = new _pixiJs.Application({
             width: 1500,
@@ -550,16 +554,26 @@ class game {
             this.pixi.stage.addChild(bigBomb);
             this.bom.push(bigBomb);
         }
-        this.plane = new _plane.Plane(this.loader.resources["planeTexture"].texture);
+        this.plane = new _plane.Plane(this.loader.resources["planeTexture"].texture, this);
         this.pixi.stage.addChild(this.plane);
-        this.laser = new _laser.Laser(this.loader.resources["laserTexture"].texture);
-        this.pixi.stage.addChild(this.laser);
         this.pixi.ticker.add(()=>this.update()
         );
     }
     update() {
         for (let bom of this.bom)bom.thrive();
         this.plane.thrive();
+    }
+    addBullet(x, y) {
+        console.log("shoot");
+        console.log(this.loader.resources["laserTexture"].texture);
+        let b = new _laser.Laser(this.loader.resources["laserTexture"].texture, this, x, y);
+        this.laser.push(b);
+        this.pixi.stage.addChild(b);
+    }
+    removeBullet(laser) {
+        this.laser = this.laser.filter((b)=>b != laser
+        );
+        laser.destroy();
     }
     collision(laser, bom) {
         const bounds1 = laser.getBounds();
@@ -37118,10 +37132,11 @@ var _pixiJs = require("pixi.js");
 class Plane extends _pixiJs.Sprite {
     xspeed = 0;
     yspeed = 0;
-    constructor(texture){
+    constructor(texture, game){
         super(texture);
         this.xspeed = 0;
         this.yspeed = 0;
+        this.game = game;
         this.x = 100;
         this.y = 100;
         this.anchor.set(0.5);
@@ -37135,6 +37150,9 @@ class Plane extends _pixiJs.Sprite {
         this.x += this.xspeed;
         this.y += this.yspeed;
     }
+    shoot() {
+        this.game.addBullet(this.x + 80, this.y + 35);
+    }
     onKeyDown(e) {
         switch(e.key.toUpperCase()){
             case "W":
@@ -37146,6 +37164,11 @@ class Plane extends _pixiJs.Sprite {
             case "ARROWDOWN":
                 console.log("S");
                 this.yspeed = 7;
+                break;
+            case "D":
+            case "ARROWRIGHT":
+                console.log("shoot");
+                this.shoot();
                 break;
         }
     }
@@ -37202,24 +37225,22 @@ parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "Laser", ()=>Laser
 );
 var _pixiJs = require("pixi.js");
+var _game = require("./game");
 class Laser extends _pixiJs.Sprite {
-    xspeed = 0;
-    yspeed = 0;
-    bigLaser = [];
-    laserSpeed = 5;
-    constructor(texture){
+    constructor(texture, game, x, y){
         super(texture);
-        this.xspeed = 0;
-        this.yspeed = 0;
-        this.x = 100;
-        this.y = 100;
-        this.scale.set(1);
-        this.onmousedown = (event)=>{
-            this.xspeed = 5;
-        };
+        this.game = game;
+        this.pivot.x = 30;
+        this.pivot.y = 30;
+        this.x = x + 20;
+        this.y = y + 20;
+    }
+    update() {
+        this.x += 3;
+        if (this.x > 900) this.game.removeBullet(this);
     }
 }
 
-},{"pixi.js":"dsYej","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["fpRtI","edeGs"], "edeGs", "parcelRequirea0e5")
+},{"pixi.js":"dsYej","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./game":"edeGs"}]},["fpRtI","edeGs"], "edeGs", "parcelRequirea0e5")
 
 //# sourceMappingURL=index.901f85c2.js.map

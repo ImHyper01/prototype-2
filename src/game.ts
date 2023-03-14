@@ -7,12 +7,14 @@ import { Bom } from "./bom"
 import { Plane } from "./plane"
 import { Laser } from './laser'
 
-class game {
+export class game {
     pixi : PIXI.Application
     loader : PIXI.Loader
     bom : Bom []=[]
     plane : Plane
-    laser : Laser
+    laser : Laser [] = []
+    container: any
+    assetLoader: any
 
 
 constructor(){
@@ -44,11 +46,8 @@ loadCompleted(){
         this.bom.push(bigBomb)
     }
 
-    this.plane = new Plane (this.loader.resources["planeTexture"].texture!)
+    this.plane = new Plane (this.loader.resources["planeTexture"].texture!, this)
     this.pixi.stage.addChild(this.plane)
-
-    this.laser = new Laser (this.loader.resources["laserTexture"].texture!)
-    this.pixi.stage.addChild(this.laser)
 
 
     this.pixi.ticker.add(() => this.update())
@@ -65,6 +64,18 @@ update(){
 }
 
 
+addBullet(x: number, y: number) {
+    console.log("shoot")
+    console.log(this.loader.resources["laserTexture"].texture!)
+    let b = new Laser(this.loader.resources["laserTexture"].texture!, this, x, y)
+    this.laser.push(b)
+    this.pixi.stage.addChild(b)
+}
+
+removeBullet(laser: Laser) {
+    this.laser = this.laser.filter((b: Laser) => b != laser)
+    laser.destroy()
+}
 
 collision(laser:PIXI.Sprite, bom:PIXI.Sprite){
     const bounds1 = laser.getBounds()
